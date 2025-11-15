@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as bip39 from "bip39";
+import Navbar from "./Navbar";
 
 export default function ImportFromSeed() {
   const [seed, setSeed] = useState("");
@@ -33,6 +34,12 @@ export default function ImportFromSeed() {
       iv: Array.from(iv),
     };
   }
+ useEffect(() => {
+    let token = localStorage.getItem("TOKEN");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
 
   // Import wallet flow
   async function handleImport() {
@@ -77,13 +84,14 @@ export default function ImportFromSeed() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6">
+    <div className="flex flex-col items-center bg-black text-white min-h-screen gap-4 p-6">
+      <Navbar/>
 
-      <h1 className="text-2xl font-bold">Import Wallet Using Seed Phrase</h1>
+      <h1 className="text-2xl font-bold mt-[10%]">Import Wallet Using Seed Phrase</h1>
 
       <textarea
         placeholder="Enter your 12 or 24 word seed phrase"
-        className="p-3 border rounded w-full max-w-lg h-32"
+        className="p-3 border w-full max-w-lg h-32 rounded-md"
         value={seed}
         onChange={(e) => setSeed(e.target.value)}
       />

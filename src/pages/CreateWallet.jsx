@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as bip39 from "bip39";
-
+import { Link } from "react-router-dom";
+import Navbar from "./Navbar";
+import EthPriceBar from "./EthPriceBar";
+import EthChart from "./EthChart";
 export default function CreateWallet() {
   const [mnemonic, setMnemonic] = useState("");
   const [password, setPassword] = useState("");
@@ -41,6 +44,12 @@ export default function CreateWallet() {
     };
   }
 
+   useEffect(() => {
+      let token = localStorage.getItem("TOKEN");
+      if (!token) {
+        window.location.href = "/login";
+      }
+    }, []);
   // Save encrypted wallet to backend
   const handleSave = async () => {
     if (!mnemonic || !password)
@@ -83,11 +92,14 @@ export default function CreateWallet() {
     setEncryptedSeed(JSON.stringify(result, null, 2));
 
     alert(`✅ Wallet "${walletLabel}" saved securely on server!`);
+    window.location.href = "/dashboard";
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6">
-      <h1 className="text-2xl font-bold">Create New Wallet</h1>
+    <div className="flex flex-col items-center  min-h-screen gap-4 p-6 bg-black text-white">
+      <Navbar/>
+
+      <h1 className="text-2xl font-bold pt-[10%]">Create New Wallet</h1>
 
       <button
         onClick={generateSeed}
@@ -97,7 +109,7 @@ export default function CreateWallet() {
       </button>
 
       {mnemonic && (
-        <div className="p-4 bg-gray-900 text-white rounded max-w-lg text-center">
+        <div className="p-4  rounded max-w-lg text-center">
           <p className="text-lg font-mono">{mnemonic}</p>
           <p className="text-red-400 text-sm mt-2">
             ⚠️ Write this down. Do not lose it.
@@ -133,10 +145,12 @@ export default function CreateWallet() {
       )}
 
       {encryptedSeed && (
-        <pre className="bg-gray-800 text-white p-4 text-xs rounded max-w-lg overflow-auto">
+        <pre className="bg-gray-800 text-white p-4 text-xs rounded max-w-lg overflow-auto hidden">
           {encryptedSeed}
         </pre>
       )}
+      <EthPriceBar/>
+      <EthChart/>
     </div>
   );
 }

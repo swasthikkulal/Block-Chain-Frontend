@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Wallet, JsonRpcProvider, formatEther, parseEther } from "ethers";
-import FaceAuth from "./FaceAuth";
 import { Link, useNavigate } from "react-router-dom";
+
 export default function Dashboard() {
   const nav = useNavigate();
-  const [verified, setVerified] = useState(false);
 
   // Wallet List
   const [walletList, setWalletList] = useState([]);
@@ -53,6 +52,7 @@ export default function Dashboard() {
       return null;
     }
   }
+
   useEffect(() => {
     let token = localStorage.getItem("TOKEN");
     if (!token) {
@@ -60,10 +60,8 @@ export default function Dashboard() {
     }
   }, []);
 
-  // Fetch wallets after FaceAuth
+  // Fetch wallets on component mount
   useEffect(() => {
-    if (!verified) return;
-
     async function loadWallets() {
       try {
         const token = localStorage.getItem("TOKEN");
@@ -81,7 +79,7 @@ export default function Dashboard() {
     }
 
     loadWallets();
-  }, [verified]);
+  }, []);
 
   // Unlock wallet
   async function unlockWallet() {
@@ -172,6 +170,13 @@ export default function Dashboard() {
     }
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("TOKEN");
+    localStorage.removeItem("USER_ID");
+    localStorage.removeItem("TEMP_USER_ID");
+    window.location.href = "/login";
+  };
+
   // Chart data
   const chartData = transactions.map((tx) => ({
     time: new Date(tx.timestamp).toLocaleTimeString(),
@@ -184,52 +189,13 @@ export default function Dashboard() {
 
   // ---------------- UI -------------------
 
-  // STEP 1 — FACE LOGIN
-  if (!verified) return <FaceAuth onSuccess={() => setVerified(true)} />;
-
-  // STEP 2 — SELECT WALLET
+  // STEP 1 — SELECT WALLET
   if (
     walletList.length > 0 &&
     wallet === null &&
     selectedWalletIndex === null
   ) {
     return (
-      // <div className="min-h-screen flex items-center justify-center text-white">
-      //   <div className="bg-black p-4 rounded-xl  w-screen h-screen shadow-lg flex flex-col items-center justify-center relative">
-      //     <div className="absolute top-3 right-3 ">
-      //       <Link to={"/create-wallet"}>
-      //         {" "}
-      //         <button className=" bg-green-500 px-2 py-2 rounded-md mx-3">
-      //           Create Wallet
-      //         </button>
-      //       </Link>
-      //       <Link to={"/import-seed"}>
-      //         <button className=" bg-orange-500 px-2 py-2 rounded-md">
-      //           Forget Wallet
-      //         </button>
-      //       </Link>
-      //     </div>
-      //     <h1 className="text-4xl font-bold mb-4  font-mono">
-      //       Select a Wallet
-      //     </h1>
-
-      //     <ul className="space-y-4 flex flex-wrap justify-center  gap-5 font-mono">
-      //       {walletList.map((w, index) => (
-      //         <li
-      //           key={index}
-      //           className="bg-orange-400 w-[20%] h-[10rem]  p-2 rounded-md cursor-pointer hover:bg-gray-700 flex flex-col justify-between items-center"
-      //           onClick={() => setSelectedWalletIndex(index)}
-      //         >
-      //           <p className="font-bold">{w.label}</p>
-      //           <img src="eht.png" alt="image" width={90} />
-      //           <p className="text-sm text-gray-700">
-      //             Created: {new Date(w.createdAt).toLocaleString()}
-      //           </p>
-      //         </li>
-      //       ))}
-      //     </ul>
-      //   </div>
-      // </div>
       <div className="min-h-screen flex items-center justify-center text-white">
         <div className="bg-black p-6 rounded-xl w-full min-h-screen shadow-lg flex flex-col items-center relative">
           {/* Top Buttons */}
@@ -247,10 +213,7 @@ export default function Dashboard() {
             </Link>
             <button
               className="bg-red-500 px-3 py-2 rounded-md font-medium hover:bg-orange-600 transition"
-              onClick={() => {
-                localStorage.removeItem("TOKEN");
-                localStorage.removeItem("USER_ID");
-              }}
+              onClick={handleLogout}
             >
               Logout
             </button>
@@ -284,7 +247,7 @@ export default function Dashboard() {
     );
   }
 
-  // STEP 3 — ENTER PASSWORD
+  // STEP 2 — ENTER PASSWORD
   if (wallet === null) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white p-6 bg-gray-950">
@@ -310,52 +273,68 @@ export default function Dashboard() {
     );
   }
 
-  // STEP 4 — DASHBOARD
+  // STEP 3 — DASHBOARD
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6 bg-gray-950 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6 bg-black text-white">
       <h1 className="text-2xl font-bold">Your Wallet</h1>
 
-      <div className="bg-gray-900 p-6 rounded-lg max-w-lg w-full text-center shadow-lg">
-        {/* Wallet Address */}
-        <p className="mt-3 text-lg font-mono break-words">{address}</p>
+      <div className="p-6 rounded-lg  w-full text-center shadow-lg flex flex-col items-center justify-center">
+        <div className="w-full sm:w-[70%] md:w-[50%] lg:w-[40%] h-auto p-6 shadow-lg flex flex-col items-center justify-center rounded-2xl bg-orange-500 hover:bg-gray-400 transition-all">
+          {/* Wallet Address */}
+          <p className="mt-1 text-sm sm:text-base md:text-lg font-mono break-words text-center px-2">
+            {address}
+          </p>
 
-        {/* Balance */}
-        <p className="mt-4 text-2xl font-semibold">
-          Balance:{" "}
-          {balanceEth === null ? "—" : `${Number(balanceEth).toFixed(4)} ETH`}
-        </p>
+          {/* ETH Logo */}
+          <img
+            src="eht.png"
+            alt="image"
+            className="w-20 sm:w-24 md:w-28 lg:w-32 mt-4"
+          />
 
-        {/* ⭐ Mining Button ⭐ */}
-        <a
-          href={`https://sepolia-faucet.pk910.de/?address=${address}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-5 py-2 rounded-lg transition"
-        >
-          ⛏️ Mine ETH from Faucet
-        </a>
+          {/* Balance */}
+          <p className="mt-4 text-xl sm:text-2xl font-semibold font-mono">
+            Balance:{" "}
+            {balanceEth === null ? "—" : `${Number(balanceEth).toFixed(4)} ETH`}
+          </p>
+
+          {/* ⭐ Mining Button ⭐ */}
+          <a
+            href={`https://sepolia-faucet.pk910.de/?address=${address}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-block bg-green-500 hover:bg-yellow-600 text-black font-semibold px-6 py-3 rounded-lg transition text-sm sm:text-base"
+          >
+            Mine ETH from Faucet
+          </a>
+        </div>
 
         {/* -------- Transactions -------- */}
-        <div className="mt-6 border-t border-gray-700 pt-4">
-          <h2 className="text-lg font-bold mb-2">Recent Transactions</h2>
+        <div className="mt-6 pt-4 w-full">
+          <h2 className="text-lg font-bold mb-3">Recent Transactions</h2>
 
           {transactions.length > 0 ? (
-            <ul className="text-sm text-left space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
               {transactions.map((tx) => (
-                <li key={tx.hash} className="border-b border-gray-700 pb-2">
-                  <p>
+                <div
+                  key={tx.hash}
+                  className="w-[full min-h-[10rem] p-4 flex flex-col items-center justify-center rounded-md bg-green-700 hover:bg-gray-400 transition"
+                >
+                  <p className="text-sm break-all">
                     <strong>Hash:</strong> {tx.hash.slice(0, 15)}...
                   </p>
-                  <p>
+
+                  <p className="text-sm pt-8">
                     <strong>Value:</strong> {formatEther(BigInt(tx.value))} ETH
                   </p>
-                  <p>
+
+                  <p className="text-sm ">
                     <strong>Time:</strong>{" "}
                     {new Date(tx.timestamp).toLocaleString()}
                   </p>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
             <p className="text-gray-400">No transactions.</p>
           )}

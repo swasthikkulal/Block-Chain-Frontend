@@ -6,41 +6,25 @@ import ImportFromSeed from "./pages/ImportFromSeed.jsx";
 import FaceRegister from "./pages/FaceRegister.jsx";
 import Register from "./pages/register.jsx";
 import FaceLogin from "./pages/FaceLogin.jsx";
+import Login from "./pages/Login.jsx";
+import Verify from "./pages/Verify.jsx";
+
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="flex flex-col items-center justify-center h-screen gap-4">
-              <h1 className="text-3xl font-bold">Secure Digital Wallet</h1>
-              <a
-                href="/create-wallet"
-                className="px-6 py-3 bg-blue-600 text-white rounded"
-              >
-                Create Wallet
-              </a>
-              <a
-                href="/import-wallet"
-                className="px-6 py-3 bg-gray-800 text-white rounded"
-              >
-                Import Wallet
-              </a>
-              <a href="/import-seed" className="text-blue-400 underline">
-                Import wallet using seed phrase
-              </a>
-            </div>
-          }
-        />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/create-wallet" element={<CreateWallet />} />
         <Route path="/import-wallet" element={<ImportWallet />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/import-seed" element={<ImportFromSeed />} />
         <Route path="/face-register" element={<FaceRegister />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<FaceLogin />} />
+        <Route path="/face-login" element={<FaceLogin />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/verify" element={<Verify />} />
+       
       </Routes>
     </BrowserRouter>
   );

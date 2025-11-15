@@ -1,5 +1,6 @@
 import { useState } from "react";
 import * as bip39 from "bip39";
+import Navbar from "./Navbar";
 
 export default function ImportWallet() {
   const [seed, setSeed] = useState("");
@@ -30,7 +31,13 @@ export default function ImportWallet() {
       iv: Array.from(iv),
     };
   }
-
+ useEffect(() => {
+    let token = localStorage.getItem("TOKEN");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
+  
   const handleImport = async () => {
     if (!bip39.validateMnemonic(seed.trim())) {
       return alert("❌ Invalid seed phrase");
@@ -68,8 +75,9 @@ export default function ImportWallet() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-6">
-      <h1 className="text-2xl font-bold">Import Wallet</h1>
+    <div className="flex flex-col items-center  min-h-screen gap-4 p-6 bg-black text-white">
+      <Navbar />
+      <h1 className="text-2xl font-bold pt-[10%]">Import Wallet</h1>
 
       <textarea
         placeholder="Enter 12 or 24 word seed phrase"

@@ -57,12 +57,12 @@ export default function FaceLogin() {
     }
 
     const embedding = Array.from(detection.descriptor);
-
+const userId = localStorage.getItem("TEMP_USER_ID"); 
     // Send ONLY embedding
     const res = await fetch(BACKEND_VERIFY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ embedding }),
+      body: JSON.stringify({ userId, embedding })
     });
 
     const data = await res.json();
