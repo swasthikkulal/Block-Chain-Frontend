@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import * as bip39 from "bip39";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default function ImportFromSeed() {
   const [seed, setSeed] = useState("");
@@ -34,7 +35,7 @@ export default function ImportFromSeed() {
       iv: Array.from(iv),
     };
   }
- useEffect(() => {
+  useEffect(() => {
     let token = localStorage.getItem("TOKEN");
     if (!token) {
       window.location.href = "/login";
@@ -85,9 +86,11 @@ export default function ImportFromSeed() {
 
   return (
     <div className="flex flex-col items-center bg-black text-white min-h-screen gap-4 p-6">
-      <Navbar/>
+      <Navbar />
 
-      <h1 className="text-2xl font-bold mt-[10%]">Import Wallet Using Seed Phrase</h1>
+      <h1 className="text-2xl font-bold mt-[10%]">
+        Import Wallet Using Seed Phrase
+      </h1>
 
       <textarea
         placeholder="Enter your 12 or 24 word seed phrase"
@@ -121,10 +124,11 @@ export default function ImportFromSeed() {
 
       {saved && (
         <p className="text-green-400 mt-2">
-          ✅ Wallet imported successfully!  
-          You can now open the Dashboard.
+          ✅ Wallet imported successfully! You can now open the Dashboard.
         </p>
       )}
+
+      <Footer />
     </div>
   );
 }

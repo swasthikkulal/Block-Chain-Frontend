@@ -83,8 +83,8 @@ const userId = localStorage.getItem("TEMP_USER_ID");
   }
 
   return (
-    <div style={{ textAlign: "center", padding: 30 }}>
-      <h2 style={{ marginBottom: 10 }}>Face Login</h2>
+    <div style={{ textAlign: "center", padding: 30 }} className="flex flex-col items-center justify-center">
+      <h2 style={{ marginBottom: 10 }} className="text-2xl font-mono font-bold pt-[10%] pb-[5%]">Face Login</h2>
 
       <video
         ref={videoRef}

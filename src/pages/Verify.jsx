@@ -69,7 +69,7 @@ export default function Verify() {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6">
+    <div className="flex flex-col items-center min-h-screen p-6 justify-center border ">
       <h1 className="text-xl font-bold mb-6">Choose Login Method</h1>
 
       <button

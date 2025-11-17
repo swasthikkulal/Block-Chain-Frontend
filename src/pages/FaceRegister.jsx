@@ -117,8 +117,8 @@ console.log("Sending to backend:", { userId, embedding });
   }
 
   return (
-    <div style={{ textAlign: "center", padding: 24 }}>
-      <h2>Face Registration</h2>
+    <div style={{ textAlign: "center", padding: 24 }} className="flex flex-col items-center justify-between ">
+      <h2 className="pt-[10%] pb-[5%] text-2xl font-bold">Face Registration</h2>
       <video
         ref={videoRef}
         width={360}
@@ -127,14 +127,15 @@ console.log("Sending to backend:", { userId, embedding });
         muted
         style={{ borderRadius: 8, border: "1px solid #444" }}
       />
-      <div style={{ marginTop: 12 }}>
+      <div style={{ marginTop: 30 }}>
         <button
           onClick={captureFace}
+          className="p-2 shadow bg-green-500 rounded-md text-white"
           style={{ padding: "8px 16px", marginRight: 8 }}
         >
           Capture Face
         </button>
-        <button onClick={startCamera} style={{ padding: "8px 16px" }}>
+        <button onClick={startCamera} className="p-2 shadow bg-red-500 rounded-md text-white" style={{ padding: "8px 16px" }}>
           Restart Camera
         </button>
       </div>

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import EthPriceBar from "./EthPriceBar";
 import EthChart from "./EthChart";
+import Footer from "./Footer";
 export default function CreateWallet() {
   const [mnemonic, setMnemonic] = useState("");
   const [password, setPassword] = useState("");
@@ -151,6 +152,7 @@ export default function CreateWallet() {
       )}
       <EthPriceBar/>
       <EthChart/>
+      <Footer/>
     </div>
   );
 }

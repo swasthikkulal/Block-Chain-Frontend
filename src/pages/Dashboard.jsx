@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Wallet, JsonRpcProvider, formatEther, parseEther } from "ethers";
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "./Footer";
 
 export default function Dashboard() {
   const nav = useNavigate();
@@ -269,6 +270,7 @@ export default function Dashboard() {
             Unlock
           </button>
         </div>
+        
       </div>
     );
   }
@@ -377,6 +379,7 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

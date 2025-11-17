@@ -24,13 +24,14 @@ export default function Login() {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6">
-      <h1 className="text-2xl mb-4">Login</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+      <div className="border w-[27vw] h-[30vw] rounded-2xl flex flex-col items-center justify-center bg-gray-100">
+      <h1 className="text-2xl mb-4 font-bold font-mono">Login</h1>
 
       <input
         type="email"
         placeholder="Email"
-        className="p-2 border mb-3 w-full max-w-sm"
+        className="p-2 mt-10 border mb-5 w-full max-w-sm rounded-md"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -38,7 +39,7 @@ export default function Login() {
       <input
         type="password"
         placeholder="Password"
-        className="p-2 border mb-3 w-full max-w-sm"
+        className="p-2 border mb-6 w-full max-w-sm rounded-md"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -49,6 +50,8 @@ export default function Login() {
       >
         Next
       </button>
+      <a href="/register" className="mt-4 text-blue-600 hover:underline">Don't have an account? Register</a>
+      </div>
     </div>
   );
 }
